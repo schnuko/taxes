@@ -6,6 +6,49 @@
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
       
+		  function StB_lin(progfaktor, steuersatz, grenze) {
+	  		return function(zvE) {
+	    		var y = (zvE - grenze) / 10000.0;
+		   		return (progfaktor * y + steuersatz) * y;
+	    	}
+	    }
+		    	
+	  	function StB_konst(steuersatz, grenze) {
+	  		return function(zvE) {
+	   			return steuersatz * (zvE - grenze);
+    		}
+    	}
+    	
+    	function computeTaxesCurrent(x) {   	
+		  	if (x < 8130) {
+	    		return [0, 0];
+		   	} else if (x < 13470) {
+		   		return [StB_lin(933.7, 1400, 8130)(x), 0];
+		   	} else if (x < 52882) {
+		   		return [1014 + StB_lin(228.74, 2397, 13469)(x), 0];
+	    	} else if (x < 250731) {
+	    		return [1014 + 13000, StB_konst(0.42, 52881)(x)];
+	    	} else {
+	    		return [1014 + 13000, 83096 + StB_konst(0.45, 250730)(x)];
+	    	}	    	
+	    }
+		    
+		  function computeTaxesGruene(x) {    	
+		   	if (x < 8712) {
+	    		return [0, 0];
+	    	} else if (x < 13470) {
+		   		return [StB_lin(1047.71, 1400, 8712)(x), 0];
+		   	} else if (x < 52882) {
+		   		return [903 + StB_lin(228.74, 2397, 13469)(x), 0];
+		   	} else if (x < 60000) {
+		   		return [903 + 13000, StB_lin(210.70, 4200, 52881)(x)];
+		   	} else if (x < 80000) {
+		   		return [903 + 13000, 3096 + StB_lin(100.00, 4500, 59999)(x)];
+	    	} else {
+	    		return [903 + 13000, 12496 + StB_konst(0.49, 79999)(x)];
+	    	}	    	  	
+	    }
+      
       function drawChart() {
 
        	var data = new google.visualization.DataTable();
@@ -49,7 +92,8 @@
 					interpolateNulls: true,
 					legend: {position:'none'},
 					chartArea: {left:'15%', width: '200%'},
-					animation: {duration: 1000, easing: 'in'}
+					animation: {duration: 1000, easing: 'in'},
+					colors: ['green', 'black']
 				};
 
 		    var options2 = { 
@@ -58,7 +102,8 @@
 					annotations: {style: 'line'},
 					interpolateNulls: true,
 					chartArea: {left:10, width: '20%'},
-					animation: {duration: 1000, easing: 'in'}
+					animation: {duration: 1000, easing: 'in'},
+					colors: ['green', 'black']
 				};
 
 		    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -66,51 +111,24 @@
 
 		    var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
 		    chart2.draw(data2, options2);
-				
-		    function computeTaxes(x) {
-		    
-		    	function StB_lin(progfaktor, steuersatz, grenze) {
-		    		return function(zvE) {
-		    			var y = (zvE - grenze) / 10000.0;
-		    			return (progfaktor * y + steuersatz) * y;
-		    		}
-		    	}
-		    	
-		    	function StB_konst(steuersatz, grenze) {
-		    		return function(zvE) {
-		    			return steuersatz * (zvE - grenze);
-		    		}
-		    	}
-		    	
-		    	if (x < 8131) {
-		    		return [0, 0, 0];
-		    	} else if (x < 13470) {
-		    		return [StB_lin(933.7, 1400, 8130)(x), 0, 0];
-		    	} else if (x < 52882) {
-		    		return [1014, StB_lin(228.74, 2397, 13496)(x), 0];
-		    	} else if (x < 250731) {
-		    		return [1014, 13000, StB_konst(0.42, 52881)(x)];
-		    	} else {
-		    		return [1014, 13000, 83096 + StB_konst(0.45, 250730)(x)];
-		    	}
-		    	
-		    }
 
 				function drawChartUser(x) {
 					var dataUser = new google.visualization.DataTable();
 					dataUser.addColumn('string', 'Vorschlag');
-					dataUser.addColumn('number', 'phase1');
-					dataUser.addColumn('number', 'phase2');
-					dataUser.addColumn('number', 'phase3');
+					dataUser.addColumn('number', 'Aktuell');
+					dataUser.addColumn('number', 'Gruene');
 					
-					var taxesAktuell = computeTaxes(x);
+					var taxesCurrent = computeTaxesCurrent(x);
+					var taxesGruene = computeTaxesGruene(x);
 					
 					dataUser.addRows([
-						['Gruene', taxesAktuell[0],taxesAktuell[1],taxesAktuell[2]],
-						['Aktuell', taxesAktuell[0],taxesAktuell[1],taxesAktuell[2]]
+						['Aktuell', taxesCurrent[0], taxesCurrent[1]],
+						['Gruene', taxesGruene[0],taxesGruene[1]]
 					]);
+					
 					var optionsUser = {
-						isStacked: true
+						isStacked: true,
+						colors: ['green', 'black']
 					};
 					
 					var chartUser = new google.visualization.ColumnChart(document.getElementById('chartUser_div'));
@@ -123,6 +141,7 @@
 
 				button.onclick = function() {
 					x = parseInt(txt.value);
+					
 					var m = (4 / 20000);
 					var t = 45 - m * 60000; 
 					var y = m * x + t;
