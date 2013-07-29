@@ -115,19 +115,22 @@
 				function drawChartUser(x) {
 					var dataUser = new google.visualization.DataTable();
 					dataUser.addColumn('string', 'Vorschlag');
-					dataUser.addColumn('number', 'Aktuell');
 					dataUser.addColumn('number', 'Gruene');
+					dataUser.addColumn('number', 'Aktuell');
+					
 					
 					var taxesCurrent = computeTaxesCurrent(x);
+					var taxesCurrentSummed = taxesCurrent[0] + taxesCurrent[1];
 					var taxesGruene = computeTaxesGruene(x);
+					var taxesGrueneSummed = taxesGruene[0] + taxesGruene[1];
 					
 					dataUser.addRows([
-						['Aktuell', taxesCurrent[0], taxesCurrent[1]],
-						['Gruene', taxesGruene[0],taxesGruene[1]]
+						['', taxesGrueneSummed, taxesCurrentSummed]
 					]);
 					
 					var optionsUser = {
-						isStacked: true,
+//						isStacked: true,
+						vAxis: {title: 'Steuerbetrag', minValue: 0.8 * Math.min(taxesCurrentSummed, taxesGrueneSummed)},
 						colors: ['green', 'black']
 					};
 					
@@ -142,12 +145,11 @@
 				button.onclick = function() {
 					x = parseInt(txt.value);
 					
-					var m = (4 / 20000);
-					var t = 45 - m * 60000; 
-					var y = m * x + t;
-		
-					data.addRow([x, 'Sie', null, null]);
-					data.sort([{column: 0}]);
+					if (data.getNumberOfRows() > 10) {
+						data.removeRow(10);
+					}
+					
+					y = data.addRow([x, 'Sie', null, null]);
 					chart.draw(data, options);
 					drawChartUser(x);
 				}
@@ -159,14 +161,14 @@
 		
 		<div style="width: 100%">
 			<div id="chart_div" style="width: 40%; height: 50%; float:left"></div>
-			<div id="chart_div2" style="width: 60%; height: 50%; float:left"></div>		
+			<div id="chart_div2" style="width: 40%; height: 50%; float:left"></div>	
+			<div id="space" style="width: 20%"></div>	
 		</div>
-		
-		
 
-
-		<input type="text" id="txt"/>
-		<input type="button" id="button" value="submit"/>
+		<div style="width: 100%">
+			<input type="text" id="txt"/>
+			<input type="button" id="button" value="submit"/>
+		</div>
 		
 		<div id="chartUser_div" style="width: 40%; height: 50%;"></div>		
 
