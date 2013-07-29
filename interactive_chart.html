@@ -1,0 +1,156 @@
+<html>
+	<head>
+    <script type="text/JavaScript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      
+      function drawChart() {
+
+       	var data = new google.visualization.DataTable();
+				var data2 = new google.visualization.DataTable();
+	
+				data.addColumn('number', 'Bruttoeinkommen');
+				data.addColumn({type: 'string', role: 'annotation'});
+				data.addColumn('number', 'Gruene');
+				data.addColumn('number', 'Aktuell');	
+
+				data2.addColumn('number', 'Bruttoeinkommen');
+				data2.addColumn({type: 'string', role: 'annotation'});
+				data2.addColumn('number', 'Gruene');
+				data2.addColumn('number', 'Aktuell');	
+
+				data.addRows([
+	 		 		[0, null, 0, 0],
+       		[8129, null, 0, 0],
+	  			[8130, null, 0, 14],
+					[8711, null, 0, null],
+					[8712, null, 14, null],
+					[13470, null, 23.97, 23.97],
+	  			[52882, null, 42, 42],
+        	[60000, null, 45, 42],  
+	  			[80000, null, 49, 42],
+					[90000, null, 49, 42]
+				]);
+
+				data2.addRows([
+					[90000, null, 49, 42],
+	  			[250730, null, 49, 42],
+	 		 		[250731, null, 49, 45],
+					[300000, null, 49, 45]  
+				]);
+
+		    var options = {
+		    	title: 'Gruene Steuerplaene', 
+					vAxis: {title: 'Steuersatz', minValue: 0}, 
+					hAxis: {title: 'Bruttoeinkommen'},
+					annotations: {style: 'line'},
+					interpolateNulls: true,
+					legend: {position:'none'},
+					chartArea: {left:'15%', width: '200%'},
+					animation: {duration: 1000, easing: 'in'}
+				};
+
+		    var options2 = { 
+					vAxis: {minValue: 0}, 
+					hAxis: {gridlines: {count: 3}},
+					annotations: {style: 'line'},
+					interpolateNulls: true,
+					chartArea: {left:10, width: '20%'},
+					animation: {duration: 1000, easing: 'in'}
+				};
+
+		    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		    chart.draw(data, options);
+
+		    var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
+		    chart2.draw(data2, options2);
+				
+		    function computeTaxes(x) {
+		    
+		    	function StB_lin(progfaktor, steuersatz, grenze) {
+		    		return function(zvE) {
+		    			var y = (zvE - grenze) / 10000.0;
+		    			return (progfaktor * y + steuersatz) * y;
+		    		}
+		    	}
+		    	
+		    	function StB_konst(steuersatz, grenze) {
+		    		return function(zvE) {
+		    			return steuersatz * (zvE - grenze);
+		    		}
+		    	}
+		    	
+		    	if (x < 8131) {
+		    		return [0, 0, 0];
+		    	} else if (x < 13470) {
+		    		return [StB_lin(933.7, 1400, 8130)(x), 0, 0];
+		    	} else if (x < 52882) {
+		    		return [1014, StB_lin(228.74, 2397, 13496)(x), 0];
+		    	} else if (x < 250731) {
+		    		return [1014, 13000, StB_konst(0.42, 52881)(x)];
+		    	} else {
+		    		return [1014, 13000, 83096 + StB_konst(0.45, 250730)(x)];
+		    	}
+		    	
+		    }
+
+				function drawChartUser(x) {
+					var dataUser = new google.visualization.DataTable();
+					dataUser.addColumn('string', 'Vorschlag');
+					dataUser.addColumn('number', 'phase1');
+					dataUser.addColumn('number', 'phase2');
+					dataUser.addColumn('number', 'phase3');
+					
+					var taxesAktuell = computeTaxes(x);
+					
+					dataUser.addRows([
+						['Gruene', taxesAktuell[0],taxesAktuell[1],taxesAktuell[2]],
+						['Aktuell', taxesAktuell[0],taxesAktuell[1],taxesAktuell[2]]
+					]);
+					var optionsUser = {
+						isStacked: true
+					};
+					
+					var chartUser = new google.visualization.ColumnChart(document.getElementById('chartUser_div'));
+		    	chartUser.draw(dataUser, optionsUser);
+		    }
+		    
+
+		    var button = document.getElementById('button');
+				var txt = document.getElementById('txt');		
+
+				button.onclick = function() {
+					x = parseInt(txt.value);
+					var m = (4 / 20000);
+					var t = 45 - m * 60000; 
+					var y = m * x + t;
+		
+					data.addRow([x, 'Sie', null, null]);
+					data.sort([{column: 0}]);
+					chart.draw(data, options);
+					drawChartUser(x);
+				}
+			}
+      
+    </script>
+  </head>
+  <body>
+		
+		<div style="width: 100%">
+			<div id="chart_div" style="width: 40%; height: 50%; float:left"></div>
+			<div id="chart_div2" style="width: 60%; height: 50%; float:left"></div>		
+		</div>
+		
+		
+
+
+		<input type="text" id="txt"/>
+		<input type="button" id="button" value="submit"/>
+		
+		<div id="chartUser_div" style="width: 40%; height: 50%;"></div>		
+
+
+  </body>
+</html>
