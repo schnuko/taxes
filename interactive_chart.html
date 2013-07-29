@@ -85,15 +85,15 @@
 				]);
 
 		    var options = {
-		    	title: 'Gruene Steuerplaene', 
-					vAxis: {title: 'Steuersatz', minValue: 0}, 
-					hAxis: {title: 'Bruttoeinkommen'},
+		    	//title: 'Die Steuerplaene der Gruenen..', 
+					vAxis: {title: 'Steuersatz in %', minValue: 0}, 
+					hAxis: {title: 'zu versteuerndes, jaehrliches Bruttoeinkommen in \u20AC'},
 					annotations: {style: 'line'},
 					interpolateNulls: true,
 					legend: {position:'none'},
-					chartArea: {left:'15%', width: '200%'},
+					chartArea: {left:'15%', width:'200%', top:'10%'},
 					animation: {duration: 1000, easing: 'in'},
-					colors: ['green', 'black']
+					colors: ['green', 'blue']
 				};
 
 		    var options2 = { 
@@ -101,9 +101,9 @@
 					hAxis: {gridlines: {count: 3}},
 					annotations: {style: 'line'},
 					interpolateNulls: true,
-					chartArea: {left:10, width: '20%'},
+					chartArea: {left:10, width:'20%', top:'10%'},
 					animation: {duration: 1000, easing: 'in'},
-					colors: ['green', 'black']
+					colors: ['green', 'blue']
 				};
 
 		    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -130,8 +130,10 @@
 					
 					var optionsUser = {
 //						isStacked: true,
-						vAxis: {title: 'Steuerbetrag', minValue: 0.8 * Math.min(taxesCurrentSummed, taxesGrueneSummed)},
-						colors: ['green', 'black']
+						chartArea: {left:'18%', top:'10%'},
+						vAxis: {title: 'Steuerbelastung in \u20AC', minValue: 0.8 * Math.min(taxesCurrentSummed, taxesGrueneSummed)},
+						animation: {duration: 1000, easing: 'in'},
+						colors: ['green', 'blue']
 					};
 					
 					var chartUser = new google.visualization.ColumnChart(document.getElementById('chartUser_div'));
@@ -147,10 +149,21 @@
 					
 					if (data.getNumberOfRows() > 10) {
 						data.removeRow(10);
+					} 
+					
+					if (data2.getNumberOfRows() > 4) {
+						data2.removeRow(4);
+					} 
+					
+					if (x < 90000) {
+						data.addRow([x, 'Ich', null, null]);
+					} else {
+						data2.addRow([x, 'Ich', null, null]);
 					}
 					
-					y = data.addRow([x, 'Sie', null, null]);
 					chart.draw(data, options);
+					chart2.draw(data2, options2);
+					
 					drawChartUser(x);
 				}
 			}
@@ -158,19 +171,26 @@
     </script>
   </head>
   <body>
+  
+  	<p style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.9em"> Die Einkommenssteuerplaene der Gruenen.. </p>
 		
 		<div style="width: 100%">
-			<div id="chart_div" style="width: 40%; height: 50%; float:left"></div>
-			<div id="chart_div2" style="width: 40%; height: 50%; float:left"></div>	
-			<div id="space" style="width: 20%"></div>	
+			<div id="chart_div" style="width: 40%; height: 40%; float:left"></div>
+			<div id="chart_div2" style="width: 40%; height: 40%; float:left"></div>	
+			<div style="width: 20%; height: 40%"></div>
 		</div>
+		
+		
 
-		<div style="width: 100%">
-			<input type="text" id="txt"/>
-			<input type="button" id="button" value="submit"/>
-		</div>
+		<p  style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.9em">
+			Was bedeutet das fuer mich als Single mit einem zu verst. Bruttoeinkommen von jaehrlich
+	 	</p>
+	 	<p  style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.9em">
+			<input type="text" size="2" id="txt"/>&euro;
+			<input type="button" id="button" value="Berechne"/>
+		</p>
 		
-		<div id="chartUser_div" style="width: 40%; height: 50%;"></div>		
+		<div id="chartUser_div" style="width: 40%; height: 40%;"></div>		
 
 
   </body>
