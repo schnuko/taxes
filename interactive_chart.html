@@ -57,16 +57,16 @@
 	
 				data.addColumn('number', 'Bruttoeinkommen');
 				data.addColumn({type: 'string', role: 'annotation'});
-				data.addColumn('number', 'Gruene');
+				data.addColumn('number', 'Gr\u00FCne');
 				data.addColumn('number', 'Aktuell');	
 
 				data2.addColumn('number', 'Bruttoeinkommen');
 				data2.addColumn({type: 'string', role: 'annotation'});
-				data2.addColumn('number', 'Gruene');
+				data2.addColumn('number', 'Gr\u00FCne');
 				data2.addColumn('number', 'Aktuell');	
 				
 				dataUser.addColumn('string', 'Vorschlag');
-				dataUser.addColumn('number', 'Gruene');
+				dataUser.addColumn('number', 'Gr\u00FCne');
 				dataUser.addColumn('number', 'Aktuell');
 
 				data.addRows([
@@ -90,8 +90,8 @@
 				]);
 
 		    var options = {
-					vAxis: {title: 'Steuersatz in %', minValue: 0}, 
-					hAxis: {title: 'zu versteuerndes, jaehrliches Bruttoeinkommen in \u20AC'},
+					vAxis: {title: 'Grenzsteuersatz in %', minValue: 0}, 
+					hAxis: {title: 'zu versteuerndes, j\u00E4hrliches Bruttoeinkommen in \u20AC'},
 					annotations: {style: 'line'},
 					interpolateNulls: true,
 					legend: {position:'none'},
@@ -152,9 +152,9 @@
 				function drawChartUser(x) {
 					
 					var taxesCurrent = computeTaxesCurrent(x);
-					var taxesCurrentSummed = taxesCurrent[0] + taxesCurrent[1];
+					var taxesCurrentSummed = Math.round(taxesCurrent[0] + taxesCurrent[1]);
 					var taxesGruene = computeTaxesGruene(x);
-					var taxesGrueneSummed = taxesGruene[0] + taxesGruene[1];
+					var taxesGrueneSummed = Math.round(taxesGruene[0] + taxesGruene[1]);
 					
 					var optionsUser = {
 //						isStacked: true,
@@ -178,7 +178,7 @@
   </head>
   <body>
   
-  	<p style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerplaene der Gruenen </p>
+  	<p style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerpl&auml;ne der Gr&uuml;nen </p>
 		
 		<div style="width: 100%">
 			<div id="chart_div" style="width: 600px; height: 40%; float:left"></div>
@@ -189,10 +189,10 @@
 		<br />
 
 		<p  style="margin-left:50px; font-family:serif; font-weight:600; font-size:0.8em">
-			Was bedeutet das fuer mich? 
+			Was bedeutet das f&uuml;r mich? 
 			<input type="button" id="button" value="Berechne"/>
 			<br />
-	 		(als Single mit einem zu versteuernden Bruttoeinkommen von jaehrlich
+	 		(als Single mit einem zu versteuernden Bruttoeinkommen von j&auml;hrlich
 			<input type="text" size="2" id="txt"/>&euro;)
 		</p>
 		
