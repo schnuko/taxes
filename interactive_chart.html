@@ -53,6 +53,7 @@
 
        	var data = new google.visualization.DataTable();
 				var data2 = new google.visualization.DataTable();
+				var dataUser = new google.visualization.DataTable();
 	
 				data.addColumn('number', 'Bruttoeinkommen');
 				data.addColumn({type: 'string', role: 'annotation'});
@@ -63,6 +64,10 @@
 				data2.addColumn({type: 'string', role: 'annotation'});
 				data2.addColumn('number', 'Gruene');
 				data2.addColumn('number', 'Aktuell');	
+				
+				dataUser.addColumn('string', 'Vorschlag');
+				dataUser.addColumn('number', 'Gruene');
+				dataUser.addColumn('number', 'Aktuell');
 
 				data.addRows([
 	 		 		[0, null, 0, 0],
@@ -91,7 +96,7 @@
 					interpolateNulls: true,
 					legend: {position:'none'},
 					chartArea: {left:'15%', width:'200%', top:'5%'},
-					animation: {duration: 1000, easing: 'in'},
+					animation: {duration: 700, easing: 'in'},
 					colors: ['green', 'blue']
 				};
 
@@ -102,7 +107,7 @@
 					interpolateNulls: true,
 					legend: {textStyle: {fontSize: 12}},
 					chartArea: {left:10, top:'5%'},
-					animation: {duration: 1000, easing: 'in'},
+					animation: {duration: 700, easing: 'in'},
 					colors: ['green', 'blue']
 				};
 
@@ -112,34 +117,8 @@
 		    var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
 		    chart2.draw(data2, options2);
 
-				function drawChartUser(x) {
-					var dataUser = new google.visualization.DataTable();
-					dataUser.addColumn('string', 'Vorschlag');
-					dataUser.addColumn('number', 'Gruene');
-					dataUser.addColumn('number', 'Aktuell');
-					
-					
-					var taxesCurrent = computeTaxesCurrent(x);
-					var taxesCurrentSummed = taxesCurrent[0] + taxesCurrent[1];
-					var taxesGruene = computeTaxesGruene(x);
-					var taxesGrueneSummed = taxesGruene[0] + taxesGruene[1];
-					
-					dataUser.addRows([
-						['', taxesGrueneSummed, taxesCurrentSummed]
-					]);
-					
-					var optionsUser = {
-//						isStacked: true,
-						chartArea: {left:'18%', top:'10%', width: '68%'},
-						vAxis: {title: 'Steuerbelastung in \u20AC', minValue: 0.8 * Math.min(taxesCurrentSummed, taxesGrueneSummed)},
-						animation: {duration: 1000, easing: 'in'},
-						colors: ['green', 'blue']
-					};
-					
-					var chartUser = new google.visualization.ColumnChart(document.getElementById('chartUser_div'));
-		    	chartUser.draw(dataUser, optionsUser);
-		    }
-		    
+				var chartUser = new google.visualization.ColumnChart(document.getElementById('chartUser_div'));
+				// no visualisation right now
 
 		    var button = document.getElementById('button');
 				var txt = document.getElementById('txt');		
@@ -155,6 +134,10 @@
 						data2.removeRow(4);
 					} 
 					
+					if (dataUser.getNumberOfRows() > 0) {
+						dataUser.removeRow(0);
+					}
+					
 					if (x < 90000) {
 						data.addRow([x, 'Ich', null, null]);
 					} else {
@@ -163,9 +146,32 @@
 					
 					chart.draw(data, options);
 					chart2.draw(data2, options2);
-					
 					drawChartUser(x);
 				}
+				
+				function drawChartUser(x) {
+					
+					var taxesCurrent = computeTaxesCurrent(x);
+					var taxesCurrentSummed = taxesCurrent[0] + taxesCurrent[1];
+					var taxesGruene = computeTaxesGruene(x);
+					var taxesGrueneSummed = taxesGruene[0] + taxesGruene[1];
+					
+					var optionsUser = {
+//						isStacked: true,
+						chartArea: {left:'18%', top:'10%', width:'68%'},
+						vAxis: {title: 'Steuerbelastung in \u20AC', minValue: 0.8 * Math.min(taxesCurrentSummed, taxesGrueneSummed)},
+						animation: {duration: 700, easing: 'in'},
+						colors: ['green', 'blue']
+					};
+					
+					dataUser.addRows([
+						['', taxesGrueneSummed, taxesCurrentSummed]
+					]);
+				
+		    	chartUser.draw(dataUser, optionsUser);
+		    	
+		    }
+				
 			}
       
     </script>
