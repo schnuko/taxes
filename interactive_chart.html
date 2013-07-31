@@ -67,7 +67,9 @@
 				
 				dataUser.addColumn('string', 'Vorschlag');
 				dataUser.addColumn('number', 'Gr\u00FCne');
+				dataUser.addColumn({type:'string', role: 'tooltip', 'p': {'html': true}});
 				dataUser.addColumn('number', 'Aktuell');
+				dataUser.addColumn({type:'string', role: 'tooltip', 'p': {'html': true}});
 
 				data.addRows([
 	 		 		[0, null, 0, 0],
@@ -77,15 +79,15 @@
 					[8712, null, 14, null],
 					[13470, null, 23.97, 23.97],
 	  			[52882, null, 42, 42],
-        	[60000, null, 45, 42],  
-	  			[80000, null, 49, 42],
+        	[60000, null, 45, null],  
+	  			[80000, null, 49, null],
 					[90000, null, 49, 42]
 				]);
 
 				data2.addRows([
 					[90000, null, 49, 42],
-	  			[250730, null, 49, 42],
-	 		 		[250731, null, 49, 45],
+	  			[250730, null, null, 42],
+	 		 		[250731, null, null, 45],
 					[300000, null, 49, 45]  
 				]);
 
@@ -140,8 +142,10 @@
 					
 					if (x < 90000) {
 						data.addRow([x, 'Ich', null, null]);
+						// TODO add point
 					} else {
 						data2.addRow([x, 'Ich', null, null]);
+						// TODO add point
 					}
 					
 					chart.draw(data, options);
@@ -153,11 +157,14 @@
 					
 					var taxesCurrent = computeTaxesCurrent(x);
 					var taxesCurrentSummed = Math.round(taxesCurrent[0] + taxesCurrent[1]);
+					var taxesCurrentAv = Math.round(taxesCurrentSummed*1000/x)/10;
 					var taxesGruene = computeTaxesGruene(x);
 					var taxesGrueneSummed = Math.round(taxesGruene[0] + taxesGruene[1]);
+					var taxesGrueneAv = Math.round(taxesGrueneSummed*1000/x)/10;
 					
 					var optionsUser = {
 //						isStacked: true,
+						tooltip: {isHtml: true},
 						chartArea: {left:'18%', top:'10%', width:'68%'},
 						vAxis: {title: 'Steuerbelastung in \u20AC', minValue: 0.8 * Math.min(taxesCurrentSummed, taxesGrueneSummed)},
 						animation: {duration: 700, easing: 'in'},
@@ -165,8 +172,16 @@
 					};
 					
 					dataUser.addRows([
-						['', taxesGrueneSummed, taxesCurrentSummed]
+						['', taxesGrueneSummed, '<div style="padding: 4px"> <b>' + taxesGrueneSummed.toString() + 
+						'\u20AC </b> j&auml;hrlich entspricht einem <br>Durchschnittssteuersatz von <b>' + taxesGrueneAv.toString() + '%</b> </div>',
+						taxesCurrentSummed, '<div style="padding: 4px"> <b>' + taxesCurrentSummed.toString() + 
+						'\u20AC </b> j&auml;hrlich entspricht einem <br>Durchschnittssteuersatz von <b>' + taxesCurrentAv.toString() + '%</b> </div>']
 					]);
+					
+					/*dataUser.addRows([
+						['', taxesGrueneSummed, '',
+						taxesCurrentSummed, '']
+					]);*/
 				
 		    	chartUser.draw(dataUser, optionsUser);
 		    	
