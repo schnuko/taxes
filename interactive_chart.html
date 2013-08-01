@@ -45,21 +45,21 @@
 			 * @param {Number} x Brutto Income
 			 * @return {Array} containing
 			 */
-		  function computeTaxesGruene(x) {    	
-		   	if (x < 8712) {
-	    		return [0, 0];
-	    	} else if (x < 13470) {
-		   		return [StB_lin(1047.71, 1400, 8712)(x), 0];
-		   	} else if (x < 52882) {
-		   		return [903 + StB_lin(228.74, 2397, 13469)(x), 0];
-		   	} else if (x < 60000) {
-		   		return [903 + 13000, StB_lin(210.70, 4200, 52881)(x)];
-		   	} else if (x < 80000) {
-		   		return [903 + 13000, 3096 + StB_lin(100.00, 4500, 59999)(x)];
-	    	} else {
-	    		return [903 + 13000, 12496 + StB_konst(0.49, 79999)(x)];
-	    	}	    	  	
-	    }
+			function computeTaxesGruene(x) {    	
+				if (x < 8712) {
+					return [0, 0];
+				} else if (x < 13470) {
+					return [StB_lin(1047.71, 1400, 8712)(x), 0];
+				} else if (x < 52882) {
+					return [903 + StB_lin(228.74, 2397, 13469)(x), 0];
+				} else if (x < 60000) {
+					return [903 + 13000, StB_lin(210.70, 4200, 52881)(x)];
+				} else if (x < 80000) {
+					return [903 + 13000, 3096 + StB_lin(100.00, 4500, 59999)(x)];
+				} else {
+					return [903 + 13000, 12496 + StB_konst(0.49, 79999)(x)];
+				}	    	  	
+			}
       
 			function drawChart() {
 
@@ -103,7 +103,7 @@
 					[300000, null, 49, 45]  
 				]);
 
-		    var options = {
+				var options = {
 					vAxis: {title: 'Grenzsteuersatz in %', minValue: 0}, 
 					hAxis: {title: 'zu versteuerndes, j\u00E4hrliches Bruttoeinkommen in \u20AC'},
 					annotations: {style: 'line'},
@@ -114,7 +114,7 @@
 					colors: ['green', 'blue']
 				};
 
-		    var options2 = { 
+				var options2 = { 
 					vAxis: {minValue: 0}, 
 					hAxis: {gridlines: {count: 3}, textStyle: {fontSize: 12}},
 					annotations: {style: 'line'},
