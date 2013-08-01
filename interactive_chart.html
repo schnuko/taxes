@@ -19,6 +19,12 @@
     		}
     	}
     	
+     /**
+		   * computes the taxes for an amount of brutto income 
+		   * the parameters of the StB_* functions are fetched from https://www.bmf-steuerrechner.de/ekst/?
+		   * @param {Number} x Brutto Income
+		   * @return {Array} containing
+		   */
     	function computeTaxesCurrent(x) {   	
 		  	if (x < 8130) {
 	    		return [0, 0];
@@ -32,7 +38,13 @@
 	    		return [1014 + 13000, 83096 + StB_konst(0.45, 250730)(x)];
 	    	}	    	
 	    }
-		    
+		  
+		  /**
+		   * computes the taxes for an amount of brutto income 
+		   * the parameters of the StB_* functions are computed to an accuracy of 0.01€
+		   * @param {Number} x Brutto Income
+		   * @return {Array} containing
+		   */
 		  function computeTaxesGruene(x) {    	
 		   	if (x < 8712) {
 	    		return [0, 0];
@@ -172,16 +184,12 @@
 					};
 					
 					dataUser.addRows([
-						['', taxesGrueneSummed, '<div style="padding: 4px"> <b>' + taxesGrueneSummed.toString() + 
+						['', taxesGrueneSummed, 
+						'<div style="padding: 5px"> <b>' + taxesGrueneSummed.toString() + 
 						'\u20AC </b> j&auml;hrlich entspricht einem <br>Durchschnittssteuersatz von <b>' + taxesGrueneAv.toString() + '%</b> </div>',
-						taxesCurrentSummed, '<div style="padding: 4px"> <b>' + taxesCurrentSummed.toString() + 
+						taxesCurrentSummed, '<div style="padding: 5px"> <b>' + taxesCurrentSummed.toString() + 
 						'\u20AC </b> j&auml;hrlich entspricht einem <br>Durchschnittssteuersatz von <b>' + taxesCurrentAv.toString() + '%</b> </div>']
 					]);
-					
-					/*dataUser.addRows([
-						['', taxesGrueneSummed, '',
-						taxesCurrentSummed, '']
-					]);*/
 				
 		    	chartUser.draw(dataUser, optionsUser);
 		    	
@@ -196,7 +204,7 @@
   	<p style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerpl&auml;ne der Gr&uuml;nen </p>
 		
 		<div style="width: 100%">
-			<div id="chart_div" style="width: 600px; height: 40%; float:left"></div>
+			<div id="chart_div" style="width: 500px; height: 40%; float:left"></div>
 			<div id="chart_div2" style="width: 300px; height: 40%; float:left"></div>	
 			<div style="height: 40%"></div>
 		</div>
