@@ -1,69 +1,57 @@
 <html>
 	<head>
-		<script type="text/JavaScript" src="https://www.google.com/jsapi"></script>
-		<script type="text/javascript">
+    <script type="text/JavaScript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
     
-			google.load("visualization", "1", {packages:["corechart"]});
-			google.setOnLoadCallback(drawChart);
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
       
-			function StB_lin(progfaktor, steuersatz, grenze) {
-				return function(zvE) {
-					var y = (zvE - grenze) / 10000.0;
-					return (progfaktor * y + steuersatz) * y;
-				}
-			}
+		  function StB_lin(progfaktor, steuersatz, grenze) {
+	  		return function(zvE) {
+	    		var y = (zvE - grenze) / 10000.0;
+		   		return (progfaktor * y + steuersatz) * y;
+	    	}
+	    }
 		    	
-			function StB_konst(steuersatz, grenze) {
-				return function(zvE) {
-					return steuersatz * (zvE - grenze);
-				}
-			}
+	  	function StB_konst(steuersatz, grenze) {
+	  		return function(zvE) {
+	   			return steuersatz * (zvE - grenze);
+    		}
+    	}
     	
-			/**
-			 * computes the current taxes for an amount of brutto income 
-			 * the parameters of the StB_* functions are fetched from https://www.bmf-steuerrechner.de/ekst/?
-			 * @param {Number} x Brutto Income
-			 * @return {Array} containing
-			 */
-			function computeTaxesCurrent(x) {   	
-				if (x < 8130) {
-					return [0, 0];
-				} else if (x < 13470) {
-					return [StB_lin(933.7, 1400, 8130)(x), 0];
-				} else if (x < 52882) {
-					return [1014 + StB_lin(228.74, 2397, 13469)(x), 0];
-				} else if (x < 250731) {
-					return [1014 + 13000, StB_konst(0.42, 52881)(x)];
-				} else {
-					return [1014 + 13000, 83096 + StB_konst(0.45, 250730)(x)];
-				}	    	
-			}
-
-			/**
-			 * computes the taxes according to plans of die Gruenen for an amount of brutto income 
-			 * the parameters of the StB_* functions are computed to an accuracy of 0.01€
-			 * @param {Number} x Brutto Income
-			 * @return {Array} containing
-			 */
-			function computeTaxesGruene(x) {    	
-				if (x < 8712) {
-					return [0, 0];
-				} else if (x < 13470) {
-					return [StB_lin(1047.71, 1400, 8712)(x), 0];
-				} else if (x < 52882) {
-					return [903 + StB_lin(228.74, 2397, 13469)(x), 0];
-				} else if (x < 60000) {
-					return [903 + 13000, StB_lin(210.70, 4200, 52881)(x)];
-				} else if (x < 80000) {
-					return [903 + 13000, 3096 + StB_lin(100.00, 4500, 59999)(x)];
-				} else {
-					return [903 + 13000, 12496 + StB_konst(0.49, 79999)(x)];
-				}	    	  	
-			}
+    	function computeTaxesCurrent(x) {   	
+		  	if (x < 8130) {
+	    		return [0, 0];
+		   	} else if (x < 13470) {
+		   		return [StB_lin(933.7, 1400, 8130)(x), 0];
+		   	} else if (x < 52882) {
+		   		return [1014 + StB_lin(228.74, 2397, 13469)(x), 0];
+	    	} else if (x < 250731) {
+	    		return [1014 + 13000, StB_konst(0.42, 52881)(x)];
+	    	} else {
+	    		return [1014 + 13000, 83096 + StB_konst(0.45, 250730)(x)];
+	    	}	    	
+	    }
+		    
+		  function computeTaxesGruene(x) {    	
+		   	if (x < 8712) {
+	    		return [0, 0];
+	    	} else if (x < 13470) {
+		   		return [StB_lin(1047.71, 1400, 8712)(x), 0];
+		   	} else if (x < 52882) {
+		   		return [903 + StB_lin(228.74, 2397, 13469)(x), 0];
+		   	} else if (x < 60000) {
+		   		return [903 + 13000, StB_lin(210.70, 4200, 52881)(x)];
+		   	} else if (x < 80000) {
+		   		return [903 + 13000, 3096 + StB_lin(100.00, 4500, 59999)(x)];
+	    	} else {
+	    		return [903 + 13000, 12496 + StB_konst(0.49, 79999)(x)];
+	    	}	    	  	
+	    }
       
-			function drawChart() {
+      function drawChart() {
 
-				var data = new google.visualization.DataTable();
+       	var data = new google.visualization.DataTable();
 				var data2 = new google.visualization.DataTable();
 				var dataUser = new google.visualization.DataTable();
 	
@@ -84,26 +72,26 @@
 				dataUser.addColumn({type:'string', role: 'tooltip', 'p': {'html': true}});
 
 				data.addRows([
-					[0, null, 0, 0],
-					[8129, null, 0, 0],
-					[8130, null, 0, 14],
+	 		 		[0, null, 0, 0],
+       		[8129, null, 0, 0],
+	  			[8130, null, 0, 14],
 					[8711, null, 0, null],
 					[8712, null, 14, null],
 					[13470, null, 23.97, 23.97],
-					[52882, null, 42, 42],
-					[60000, null, 45, null],  
-					[80000, null, 49, null],
+	  			[52882, null, 42, 42],
+        	[60000, null, 45, null],  
+	  			[80000, null, 49, null],
 					[90000, null, 49, 42]
 				]);
 
 				data2.addRows([
 					[90000, null, 49, 42],
-					[250730, null, null, 42],
-					[250731, null, null, 45],
+	  			[250730, null, null, 42],
+	 		 		[250731, null, null, 45],
 					[300000, null, 49, 45]  
 				]);
 
-				var options = {
+		    var options = {
 					vAxis: {title: 'Grenzsteuersatz in %', minValue: 0}, 
 					hAxis: {title: 'zu versteuerndes, j\u00E4hrliches Bruttoeinkommen in \u20AC'},
 					annotations: {style: 'line'},
@@ -114,7 +102,7 @@
 					colors: ['green', 'blue']
 				};
 
-				var options2 = { 
+		    var options2 = { 
 					vAxis: {minValue: 0}, 
 					hAxis: {gridlines: {count: 3}, textStyle: {fontSize: 12}},
 					annotations: {style: 'line'},
@@ -125,16 +113,16 @@
 					colors: ['green', 'blue']
 				};
 
-				var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-				chart.draw(data, options);
+		    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		    chart.draw(data, options);
 
-				var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
-				chart2.draw(data2, options2);
+		    var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
+		    chart2.draw(data2, options2);
 
 				var chartUser = new google.visualization.ColumnChart(document.getElementById('chartUser_div'));
 				// no visualisation right now
 
-				var button = document.getElementById('button');
+		    var button = document.getElementById('button');
 				var txt = document.getElementById('txt');		
 
 				button.onclick = function() {
@@ -191,17 +179,17 @@
 						'\u20AC </b> j&auml;hrlich entspricht einem <br>Durchschnittssteuersatz von <b>' + taxesCurrentAv.toString() + '%</b> </div>']
 					]);
 				
-					chartUser.draw(dataUser, optionsUser);
+		    	chartUser.draw(dataUser, optionsUser);
 		    	
-				}
+		    }
 				
 			}
       
-		</script>
-	</head>
-	<body>
+    </script>
+  </head>
+  <body>
   
-		<p style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerpl&auml;ne der Gr&uuml;nen </p>
+  	<p style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerpl&auml;ne der Gr&uuml;nen </p>
 		
 		<div style="width: 100%">
 			<div id="chart_div" style="width: 500px; height: 40%; float:left"></div>
@@ -222,5 +210,5 @@
 		<div id="chartUser_div" style="width: 600px; height: 40%; float:left"></div>		
 
 
-	</body>
+  </body>
 </html>
