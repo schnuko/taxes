@@ -155,8 +155,7 @@
 					} 
 					
 					if (dataUser.getNumberOfRows() > 0) {
-						dataUser.removeRow(1);
-						dataUser.removeRow(0);
+						dataUser.removeRows(0, 4);
 					}
 					
 					if (x < 90000) {
@@ -184,8 +183,7 @@
 					var x = parseInt(txt.value);
 				
 					if (dataUser.getNumberOfRows() > 0) {
-						dataUser.removeRow(1);
-						dataUser.removeRow(0);
+						dataUser.removeRows(0, 4);
 					}				
 				
 					if (checkbox.checked) {
@@ -217,10 +215,12 @@
 						vAxis: {title: 'Steuerbelastung in \u20AC', minValue: 0/*0.8 * Math.min(taxesCurrentSummed, taxesGrueneSummed)*/},
 						animation: {duration: animationDur, easing: 'in'},
 						colors: ['green', 'blue'],
-						legend: {position: 'none'}
+						legend: {position: 'none'},
+						bar: {groupWidth: '98.5%'}
 					};
 				
 					dataUser.addRows([
+						['', 0, '', 0, ''],
 						[
 							'Gr\u00FCne', 
 							taxesGrueneSummed, 
@@ -236,7 +236,8 @@
 							taxesCurrentSummed, 
 							'<div style="padding: 5px"> <b>' + taxesCurrentSummed.toString() + 
 								'\u20AC </b> j&auml;hrlich entspricht einem <br>Durchschnittssteuersatz von <b>' + taxesCurrentAv.toString() + '%</b> </div>'
-						]
+						],
+						['', 0, '', 0, '']
 					]);
 					
 					chartUser.draw(dataUser, optionsUser);
@@ -263,18 +264,20 @@
 						vAxis: {title: 'Steuerbelastung in \u20AC', minValue: 0},
 						animation: {duration: animationDur, easing: 'in'},
 						colors: ['green', 'green', 'blue', 'blue'],
-						legend: {position: 'none'}
+						legend: {position: 'none'},
+						bar: {groupWidth: '98.5%'}
 					};
 					
 					dataUser.addRows([
+						['', 0, '', 0, '', 0, '', 0, ''],
 						[
 							'Gr\u00FCne', 
 							taxesGruene[0], 
 							'<div style="padding: 5px"> <b>' + Math.round(taxesGruene[0]).toString() + 
-								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Gehalt bis 52882&euro; </div>',
+								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Einkommen bis 52882&euro; </div>',
 							taxesGruene[1], 
 							'<div style="padding: 5px"> <b>' + Math.round(taxesGruene[1]).toString() + 
-								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Gehalt ab 52882&euro; </div>',
+								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Einkommen ab 52882&euro; </div>',
 							0, 
 							'', 
 							0, 
@@ -288,11 +291,12 @@
 							'', 
 							taxesCurrent[0], 
 							'<div style="padding: 5px"> <b>' + Math.round(taxesCurrent[0]).toString() + 
-								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Gehalt bis 52882&euro; </div>',
+								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Einkommen bis 52882&euro; </div>',
 							taxesCurrent[1], 
 							'<div style="padding: 5px"> <b>' + Math.round(taxesCurrent[1]).toString() + 
-								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Gehalt ab 52882&euro; </div>',
-						]
+								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Einkommen ab 52882&euro; </div>',
+						],
+						['', 0, '', 0, '', 0, '', 0, '']
 					]);
 					
 					chartUser.draw(dataUser, optionsUser);			
@@ -323,7 +327,7 @@
 			<input type="text" size="2" id="txt"/>&euro;)
 			<br />
 			<label id="checkboxLabel" style="font-weight:300; visibility:hidden"> 
-				(<input id = "checkbox" type='checkbox'> aufgeschl&uuml;sselt in Belastung des Gehalts bis und &uuml;ber 52882&euro;) 
+				(<input id = "checkbox" type='checkbox'> aufgeschl&uuml;sselt in Steuerbelastung aus Bruttoeinkommen bis und oberhalb von	 52882&euro;) 
 			</label>
 		</p>
 		
