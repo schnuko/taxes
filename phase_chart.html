@@ -60,6 +60,59 @@
 					return [903 + 13000, 12496 + StB_konst(0.49, 79999)(x)];
 				}	    	  	
 			}
+			
+			/**
+			 * computes the tax Rate (Grenzsteuersatz) for an amount of brutto income
+			 * @param {Number} x brutto income
+			 * @return {Array} containing the tax rate according to plans of Gruene and current state
+			 * and the index where the row will be inserted in the dataTable afterwards
+			 */
+			function computeTaxRates(x) {
+			
+				if (x < 8130) {
+					yGruene = 0;
+					yAktuell = 0;
+					index = 1;
+				}
+				else if (x < 8712) {
+					yGruene = 0;
+					yAktuell =18.67 * Math.pow(10, -4) * x - 1.179;
+					index = 3;
+				}
+				else if (x < 13470) {
+					yGruene = 20.95 * Math.pow(10, -4) * x - 4.255;
+					yAktuell =18.67 * Math.pow(10, -4) * x - 1.179;
+					index = 5;
+				}
+				else if (x < 52882) {
+					yGruene = 4.575 * Math.pow(10, -4) * x + 17.81;
+					yAktuell = 4.575 * Math.pow(10, -4) * x + 17.81;
+					index = 6;
+				}
+				else if (x < 60000) {
+					yGruene = 4.215 * Math.pow(10, -4) * x + 19.71;
+					yAktuell = 42;
+					index = 7;
+				}
+				else if (x < 80000) {
+					yGruene = 2 * Math.pow(10, -4) * x + 33;
+					yAktuell = 42;
+					index = 8;
+				}
+				else if (x < 250731) {
+					yGruene = 49;
+					yAktuell = 42;
+					index = 9;
+				}
+				else {
+					yGruene = 49;
+					yAktuell = 45;
+					index = 11;
+				}
+				
+				return [yGruene, yAktuell, index];
+				
+			}
       
 			function drawChart() {
 
@@ -93,7 +146,7 @@
 					[52882, null, 42, 42],
 					[60000, null, 45, null],  
 					[80000, null, 49, null],
-					[90000, null, 49, 42]
+					[89999, null, 49, 42]
 				]);
 
 				data2.addRows([
@@ -109,9 +162,10 @@
 					annotations: {style: 'line'},
 					interpolateNulls: true,
 					legend: {position:'none'},
-					chartArea: {left:'15%', width:'200%', top:'5%'},
+					chartArea: {left:'15%', width:'100%', top:'5%'},
 					animation: {duration: 700, easing: 'in'},
 					colors: ['green', 'blue']
+					
 				};
 
 				var options2 = { 
@@ -123,6 +177,7 @@
 					chartArea: {left:10, top:'5%'},
 					animation: {duration: 700, easing: 'in'},
 					colors: ['green', 'blue']
+					
 				};
 
 				var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -139,7 +194,8 @@
 				var checkbox = document.getElementById('checkbox');
 				var txt = document.getElementById('txt');		
 				
-
+				var indexInsertedRow = -1;
+				
 				button.onclick = function() {
 				
 					checkboxLabel.style.visibility="visible";
@@ -147,23 +203,24 @@
 					var x = parseInt(txt.value);
 					
 					if (data.getNumberOfRows() > 10) {
-						data.removeRow(10);
+						data.removeRow(indexInsertedRow);
 					} 
 					
 					if (data2.getNumberOfRows() > 4) {
-						data2.removeRow(4);
+						data2.removeRow(indexInsertedRow % 8);
 					} 
 					
 					if (dataUser.getNumberOfRows() > 0) {
 						dataUser.removeRows(0, 4);
 					}
 					
+					var taxRates = computeTaxRates(x);
+					indexInsertedRow = taxRates[2];
+					
 					if (x < 90000) {
-						data.addRow([x, 'Ich', null, null]);
-						// TODO add point
-					} else {
-						data2.addRow([x, 'Ich', null, null]);
-						// TODO add point
+						data.insertRows(indexInsertedRow, [[x, 'Ich', taxRates[0], taxRates[1]]]);
+					} else if (x < 300000) {
+						data2.insertRows(indexInsertedRow % 8, [[x, 'Ich', taxRates[0], taxRates[1]]]);
 					}
 					
 					chart.draw(data, options);
@@ -327,7 +384,7 @@
 			<input type="text" size="2" id="txt"/>&euro;)
 			<br />
 			<label id="checkboxLabel" style="font-weight:300; visibility:hidden"> 
-				(<input id = "checkbox" type='checkbox'> aufgeschl&uuml;sselt in Steuerbelastung aus Bruttoeinkommen bis und oberhalb von	 52882&euro;) 
+				(<input id = "checkbox" type='checkbox'> aufgeschl&uuml;sselt nach Steuerbelastung aus Bruttoeinkommen bis und oberhalb von	52882&euro;) 
 			</label>
 		</p>
 		
