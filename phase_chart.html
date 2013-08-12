@@ -26,13 +26,13 @@
 			 * @return {Array} containing
 			 */
 			function computeTaxesCurrent(x) {   	
-				if (x < 8130) {
+				if (x<8130) {
 					return [0, 0];
-				} else if (x < 13470) {
+				} else if (x<13470) {
 					return [StB_lin(933.7, 1400, 8130)(x), 0];
-				} else if (x < 52882) {
+				} else if (x<52882) {
 					return [1014 + StB_lin(228.74, 2397, 13469)(x), 0];
-				} else if (x < 250731) {
+				} else if (x<250731) {
 					return [1014 + 13000, StB_konst(0.42, 52881)(x)];
 				} else {
 					return [1014 + 13000, 83096 + StB_konst(0.45, 250730)(x)];
@@ -46,15 +46,15 @@
 			 * @return {Array} containing
 			 */
 			function computeTaxesGruene(x) {    	
-				if (x < 8712) {
+				if (x<8712) {
 					return [0, 0];
-				} else if (x < 13470) {
+				} else if (x<13470) {
 					return [StB_lin(1047.71, 1400, 8712)(x), 0];
-				} else if (x < 52882) {
+				} else if (x<52882) {
 					return [903 + StB_lin(228.74, 2397, 13469)(x), 0];
-				} else if (x < 60000) {
+				} else if (x<60000) {
 					return [903 + 13000, StB_lin(210.70, 4200, 52881)(x)];
-				} else if (x < 80000) {
+				} else if (x<80000) {
 					return [903 + 13000, 3096 + StB_lin(100.00, 4500, 59999)(x)];
 				} else {
 					return [903 + 13000, 12496 + StB_konst(0.49, 79999)(x)];
@@ -69,37 +69,37 @@
 			 */
 			function computeTaxRates(x) {
 			
-				if (x < 8130) {
+				if (x<8130) {
 					yGruene = 0;
 					yAktuell = 0;
 					index = 1;
 				}
-				else if (x < 8712) {
+				else if (x<8712) {
 					yGruene = 0;
 					yAktuell =18.67 * Math.pow(10, -4) * x - 1.179;
 					index = 3;
 				}
-				else if (x < 13470) {
+				else if (x<13470) {
 					yGruene = 20.95 * Math.pow(10, -4) * x - 4.255;
 					yAktuell =18.67 * Math.pow(10, -4) * x - 1.179;
 					index = 5;
 				}
-				else if (x < 52882) {
+				else if (x<52882) {
 					yGruene = 4.575 * Math.pow(10, -4) * x + 17.81;
 					yAktuell = 4.575 * Math.pow(10, -4) * x + 17.81;
 					index = 6;
 				}
-				else if (x < 60000) {
+				else if (x<60000) {
 					yGruene = 4.215 * Math.pow(10, -4) * x + 19.71;
 					yAktuell = 42;
 					index = 7;
 				}
-				else if (x < 80000) {
+				else if (x<80000) {
 					yGruene = 2 * Math.pow(10, -4) * x + 33;
 					yAktuell = 42;
 					index = 8;
 				}
-				else if (x < 250731) {
+				else if (x<250731) {
 					yGruene = 49;
 					yAktuell = 42;
 					index = 9;
@@ -113,6 +113,35 @@
 				return [yGruene, yAktuell, index];
 				
 			}
+			
+			/**
+			 * updates a DataTable, so the tax rates for all rows up to a certain value are added in column 4 (Gruene) and 5 (current)
+			 * @param {DataTable} table which is updated
+			 * @param {Number} x value up to which the tax rates are computed
+			 */
+			function updateDataTable(table, x) {
+			
+				for (var i=0; i<table.getNumberOfRows(); i++) {
+				
+					var step = table.getValue(i, 0);		
+						
+					if (step<=x) {			
+					
+						taxRates = computeTaxRates(step);
+												
+						table.setValue(i, 4, Math.round(taxRates[0]*100) / 100);
+						table.setValue(i, 5, Math.round(taxRates[1]*100) / 100);
+						
+					} else {
+					
+						table.setValue(i, 4, null);
+						table.setValue(i, 5, null);
+						
+					}				
+					
+				}
+			
+			}
       
 			function drawChart() {
 
@@ -124,36 +153,40 @@
 				data.addColumn({type: 'string', role: 'annotation'});
 				data.addColumn('number', 'Gr\u00FCne');
 				data.addColumn('number', 'Aktuell');	
+				data.addColumn('number', 'Gr\u00FCne');
+				data.addColumn('number', 'Aktuell');
 
 				data2.addColumn('number', 'Bruttoeinkommen');
 				data2.addColumn({type: 'string', role: 'annotation'});
 				data2.addColumn('number', 'Gr\u00FCne');
 				data2.addColumn('number', 'Aktuell');	
+				data2.addColumn('number', 'Gr\u00FCne');
+				data2.addColumn('number', 'Aktuell');
 				
 				dataUser.addColumn('string', 'Vorschlag');
 				dataUser.addColumn('number', 'Gr\u00FCne');
 				dataUser.addColumn({type:'string', role: 'tooltip', 'p': {'html': true}});
 				dataUser.addColumn('number', 'Aktuell');
 				dataUser.addColumn({type:'string', role: 'tooltip', 'p': {'html': true}});
-
+				
 				data.addRows([
-					[0, null, 0, 0],
-					[8129, null, 0, 0],
-					[8130, null, 0, 14],
-					[8711, null, 0, null],
-					[8712, null, 14, null],
-					[13470, null, 23.97, 23.97],
-					[52882, null, 42, 42],
-					[60000, null, 45, null],  
-					[80000, null, 49, null],
-					[89999, null, 49, 42]
+					[0, null, 0, 0, null, null],
+					[8129, null, 0, 0, null, null],
+					[8130, null, 0, 14, null, null],
+					[8711, null, 0, null, null, null],
+					[8712, null, 14, null, null, null],
+					[13470, null, 23.97, 23.97, null, null],
+					[52882, null, 42, 42, null, null],
+					[60000, null, 45, null, null, null],  
+					[80000, null, 49, null, null, null],
+					[89999, null, 49, 42, null, null]
 				]);
 
 				data2.addRows([
-					[90000, null, 49, 42],
-					[250730, null, null, 42],
-					[250731, null, null, 45],
-					[300000, null, 49, 45]  
+					[90000, null, 49, 42, null, null],
+					[250730, null, null, 42, null, null],
+					[250731, null, null, 45, null, null],
+					[300000, null, 49, 45, null, null]  
 				]);
 
 				var options = {
@@ -163,27 +196,29 @@
 					interpolateNulls: true,
 					legend: {position:'none'},
 					chartArea: {left:'15%', width:'100%', top:'5%'},
-					animation: {duration: 700, easing: 'in'},
-					colors: ['green', 'blue']
-					
+					animation: {duration: 000, easing: 'in'},
+					colors: ['green', 'blue'],
+					seriesType: "line",
+					series: {2: {type: "area"}, 3: {type: "area", areaOpacity:0.2}}
 				};
 
 				var options2 = { 
 					vAxis: {minValue: 0}, 
-					hAxis: {gridlines: {count: 3}, textStyle: {fontSize: 12}},
+					hAxis: {gridlines: {count: 3}, textStyle: {fontSize: 12}, allowContainerBoundaryTextCufoff: true},
 					annotations: {style: 'line'},
 					interpolateNulls: true,
 					legend: {textStyle: {fontSize: 12}},
-					chartArea: {left:10, top:'5%'},
-					animation: {duration: 700, easing: 'in'},
-					colors: ['green', 'blue']
-					
+					chartArea: {left:11, top:'5%'},
+					animation: {duration: 000, easing: 'in'},
+					colors: ['green', 'blue'],
+					seriesType: "line",
+					series: {2: {type: "area", visibleInLegend: false}, 3: {type: "area", visibleInLegend: false, areaOpacity: 0.2}}
 				};
 
-				var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+				var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
 				chart.draw(data, options);
 
-				var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
+				var chart2 = new google.visualization.ComboChart(document.getElementById('chart_div2'));
 				chart2.draw(data2, options2);
 
 				var chartUser = new google.visualization.ColumnChart(document.getElementById('chartUser_div'));
@@ -197,8 +232,6 @@
 				var indexInsertedRow = -1;
 				
 				button.onclick = function() {
-				
-					checkboxLabel.style.visibility="visible";
 				
 					var x = parseInt(txt.value);
 					
@@ -217,11 +250,20 @@
 					var taxRates = computeTaxRates(x);
 					indexInsertedRow = taxRates[2];
 					
-					if (x < 90000) {
-						data.insertRows(indexInsertedRow, [[x, 'Ich', taxRates[0], taxRates[1]]]);
-					} else if (x < 300000) {
-						data2.insertRows(indexInsertedRow % 8, [[x, 'Ich', taxRates[0], taxRates[1]]]);
+					if (x<90000) {
+						data.insertRows(indexInsertedRow, [[x, 'Ich', Math.round(taxRates[0]*100)/100, Math.round(taxRates[1]*100)/100, null, null]]);
+					} else if (x<300000) {
+						data2.insertRows(indexInsertedRow % 8, [[x, 'Ich', Math.round(taxRates[0]*100)/100, Math.round(taxRates[1]*100)/100, null, null]]);
 					}
+					
+					if (x<53500) {
+						checkboxLabel.style.visibility="hidden";
+					} else {
+						checkboxLabel.style.visibility="visible";
+					}
+					
+					updateDataTable(data, x);
+					updateDataTable(data2, x);
 					
 					chart.draw(data, options);
 					chart2.draw(data2, options2);
