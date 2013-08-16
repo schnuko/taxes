@@ -191,7 +191,7 @@
 
 				var options = {
 					vAxis: {title: 'Grenzsteuersatz in %', minValue: 0}, 
-					hAxis: {title: 'zu versteuerndes, j\u00E4hrliches Bruttoeinkommen in \u20AC'},
+					hAxis: {title: 'zu versteuerndes, j\u00E4hrliches Bruttoeinkommen in \u20AC', textStyle: {fontSize: 12}},
 					annotations: {style: 'line'},
 					interpolateNulls: true,
 					legend: {position:'none'},
@@ -393,7 +393,7 @@
 								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Einkommen bis 52882&euro; </div>',
 							taxesCurrent[1], 
 							'<div style="padding: 5px"> <b>' + Math.round(taxesCurrent[1]).toString() + 
-								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Einkommen ab 52882&euro; </div>',
+								'\u20AC </b> j&auml;hrliche Steuerbelastung f&uuml;r mein Einkommen ab 52882&euro; </div>'
 						],
 						['', 0, '', 0, '', 0, '', 0, '']
 					]);
@@ -407,10 +407,12 @@
 		</script>
 	</head>
 	<body>
-  
-		<p style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerpl&auml;ne der Gr&uuml;nen </p>
+	
+		<div>
+		<h5 style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerpl&auml;ne der Gr&uuml;nen <span style="font-weight:300">(<a href = "./artikel.html">zum Artikel</a>) </span> </h5>
 		
-		<div style="width: 100%">
+		<div>
+		<div style="width: 100%, height: 40%">
 			<div id="chart_div" style="width: 500px; height: 40%; float:left"></div>
 			<div id="chart_div2" style="width: 300px; height: 40%; float:left"></div>	
 			<div style="height: 40%"></div>
@@ -423,7 +425,7 @@
 			<input type="button" id="button" value="Berechne"/>
 			<br />
 	 		(als Single mit einem zu versteuernden Bruttoeinkommen von j&auml;hrlich
-			<input type="text" size="2" id="txt"/>&euro;)
+			<input type="text" size="6" id="txt"/>&euro;)
 			<br />
 			<label id="checkboxLabel" style="font-weight:300; visibility:hidden"> 
 				(<input id = "checkbox" type='checkbox'> aufgeschl&uuml;sselt nach Steuerbelastung aus Bruttoeinkommen bis und oberhalb von	52882&euro;) 
