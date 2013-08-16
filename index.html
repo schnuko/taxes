@@ -151,14 +151,14 @@
 	
 				data.addColumn('number', 'Bruttoeinkommen');
 				data.addColumn({type: 'string', role: 'annotation'});
-				data.addColumn('number', 'Gr\u00FCne');
+				data.addColumn('number', 'Gr\u00FCnen');
 				data.addColumn('number', 'Aktuell');	
 				data.addColumn('number', 'Gr\u00FCne');
 				data.addColumn('number', 'Aktuell');
 
 				data2.addColumn('number', 'Bruttoeinkommen');
 				data2.addColumn({type: 'string', role: 'annotation'});
-				data2.addColumn('number', 'Gr\u00FCne');
+				data2.addColumn('number', 'Gr\u00FCnen');
 				data2.addColumn('number', 'Aktuell');	
 				data2.addColumn('number', 'Gr\u00FCne');
 				data2.addColumn('number', 'Aktuell');
@@ -199,7 +199,8 @@
 					animation: {duration: 000, easing: 'in'},
 					colors: ['green', 'blue'],
 					seriesType: "line",
-					series: {2: {type: "area"}, 3: {type: "area", areaOpacity:0.2}}
+					series: {2: {type: "area"}, 3: {type: "area", areaOpacity:0.2}},
+					fontSize: 14
 				};
 
 				var options2 = { 
@@ -207,12 +208,12 @@
 					hAxis: {gridlines: {count: 3}, textStyle: {fontSize: 12}, allowContainerBoundaryTextCufoff: true},
 					annotations: {style: 'line'},
 					interpolateNulls: true,
-					legend: {textStyle: {fontSize: 12}},
 					chartArea: {left:11, top:'5%'},
 					animation: {duration: 000, easing: 'in'},
 					colors: ['green', 'blue'],
 					seriesType: "line",
-					series: {2: {type: "area", visibleInLegend: false}, 3: {type: "area", visibleInLegend: false, areaOpacity: 0.2}}
+					series: {2: {type: "area", visibleInLegend: false}, 3: {type: "area", visibleInLegend: false, areaOpacity: 0.2}},
+					fontSize:14
 				};
 
 				var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
@@ -315,13 +316,14 @@
 						animation: {duration: animationDur, easing: 'in'},
 						colors: ['green', 'blue'],
 						legend: {position: 'none'},
-						bar: {groupWidth: '98.5%'}
+						bar: {groupWidth: '98.5%'},
+						fontSize: 14
 					};
 				
 					dataUser.addRows([
 						['', 0, '', 0, ''],
 						[
-							'Gr\u00FCne', 
+							'Gr\u00FCnen', 
 							taxesGrueneSummed, 
 							'<div style="padding: 5px"> <b>' + taxesGrueneSummed.toString() + 
 								'\u20AC </b> j&auml;hrlich entspricht einem <br>Durchschnittssteuersatz von <b>' + taxesGrueneAv.toString() + '%</b> </div>',
@@ -364,7 +366,8 @@
 						animation: {duration: animationDur, easing: 'in'},
 						colors: ['green', 'green', 'blue', 'blue'],
 						legend: {position: 'none'},
-						bar: {groupWidth: '98.5%'}
+						bar: {groupWidth: '98.5%'},
+						fontSize:14
 					};
 					
 					dataUser.addRows([
@@ -406,10 +409,10 @@
       
 		</script>
 	</head>
-	<body>
+	<body style="font-family:'Times New Roman', serif; font-size:1.0em">
 	
 		<div>
-		<h5 style="text-indent:50px; font-family:serif; font-weight:600; font-size:0.8em"> Die Einkommenssteuerpl&auml;ne der Gr&uuml;nen <span style="font-weight:300">(<a href = "./artikel.html">zum Artikel</a>) </span> </h5>
+		<p style="text-indent:50px; font-weight:600; font-size:1.0em"> Einkommenssteuer und Steuerpl&auml;ne der Gr&uuml;nen <span style="font-weight:300">(<a href = "./artikel.html">zum Artikel</a>) </span> </p>
 		
 		<div>
 		<div style="width: 100%, height: 40%">
@@ -420,7 +423,7 @@
 		
 		<br />
 
-		<p  style="margin-left:50px; font-family:serif; font-weight:600; font-size:0.8em">
+		<p  style="margin-left:50px; font-weight:600;">
 			Was bedeutet das f&uuml;r mich? 
 			<input type="button" id="button" value="Berechne"/>
 			<br />
