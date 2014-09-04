@@ -1,0 +1,17 @@
+body { font-family:'Times New Roman', serif; font-size:1.0em }
+p { margin-left:50px; font-weight:600 }
+span { font-weight:300 }
+
+#chartDiv { width:500px; height:300px; float:left}
+#chart2Div { width: 300px; height:300px; float:left }
+#chartSpaceDiv { height:300px; width: 1000px; float:left;}
+#checkBoxLabel { font-weight:300; visibility:hidden }
+#chartUserDiv { width: 600px; height: 300px; float:left }
+
+#charts-container, #container {
+	width:1800px;
+}
+
+.tooltip { padding:5px; font-size:1.2em; font-family:'Arial', sans-serif; font-weight:600 }
+
+

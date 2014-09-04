@@ -1,40 +1,47 @@
 <html>
 
 	<head>
-	<link rel="stylesheet" type="text/css" href="index.css"/> 
+		<meta charset="utf-8">
+		<!--link href="css/bootstrap.min.css" rel="stylesheet"-->
+		<link href="css/index.css" rel="stylesheet" type="text/css" /> 
 		<script type="text/JavaScript" src="https://www.google.com/jsapi"></script>
-		<script type="text/JavaScript" src="./index.js"></script>
+		<script type="text/JavaScript" src="js/index.js"></script>
 	</head>
 	
 	<body>
 	
-		<div>
-			<p> 
-				Einkommenssteuer und Steuerpl&auml;ne der Gr&uuml;nen <span>(<a href="./artikel.html">zum Artikel</a>) (<a href="https://github.com/schnuko/taxes">zu GitHub<a>) </span> 
-			</p>
-		
+		<div id="container">
 			<div>
+				<p> Einkommenssteuer und Steuerpl&auml;ne der Gr&uuml;nen (<a href="./artikel.html">zum Artikel</a>)
+				</p>
+			</div>
+
+			<div id="charts-container" class="clearfix">
 				<div id="chartDiv"></div>
 				<div id="chart2Div"></div>	
 				<div id="chartSpaceDiv"></div>
 			</div>
-		
-			<br />
 
-			<p>
-				Was bedeutet das f&uuml;r mich? 
-				<input type="button" id="button" value="Berechne"/>
-				<br />
-		 		(als Single mit einem zu versteuernden Bruttoeinkommen von j&auml;hrlich
-				<input type="text" size="6" id="txt"/>&euro;)
-				<br />
-				<label id="checkboxLabel"> 
-					(<input id = "checkbox" type='checkbox'> aufgeschl&uuml;sselt nach Steuerbelastung aus Bruttoeinkommen bis und oberhalb von	52882&euro;) 
-				</label>
-			</p>
+			<div>
+				<p>
+					Was bedeutet das f&uuml;r mich? 
+					<input type="button" id="button" value="Berechne"/>
+					<br />
+			 		(als Single mit einem zu versteuernden Bruttoeinkommen von j&auml;hrlich
+					<input type="text" size="6" id="txt"/>&euro;)
+					<br />
+					<label id="checkboxLabel"> 
+						(<input id = "checkbox" type='checkbox'> aufgeschl&uuml;sselt nach Steuerbelastung aus Bruttoeinkommen bis und oberhalb von	52882&euro;) 
+					</label>
+				</p>
+			</div>
 		
 			<div id="chartUserDiv"></div>		
 		</div>
+
+		<!-- Include jQuery and bootstrap JS plugins -->
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
 
 	</body>
 	

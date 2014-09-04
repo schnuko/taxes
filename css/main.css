@@ -1,0 +1,46 @@
+body, html {
+  height: 100%;
+}
+
+.container-oli {
+    height: 100%;
+    text-align: center;
+}
+
+.container-oli:before {    /* create a full-height inline block pseudo=element */
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;  /* vertical alignment of the inline element */
+    height: 100%;
+}
+
+#element {
+    display: inline-block;
+    vertical-align: middle;  /* vertical alignment of the inline element */
+}
+
+#back {
+	position: absolute;
+	right: 0;
+	bottom:	0;
+	padding-bottom: 10px;
+}
+
+.text-container {
+	padding: 20px;
+}
+
+.table {
+	width: auto;
+	float: right;
+	margin: 0px 10px 20px 30px;
+}
+
+.relative-row {
+    position: relative;
+}
+
+
+
+
+
