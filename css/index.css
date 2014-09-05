@@ -1,5 +1,5 @@
 body { font-family:'Times New Roman', serif; font-size:1.0em }
-p { margin-left:50px; font-weight:600 }
+p { margin-left:50px; font-weight:bold }
 span { font-weight:300 }
 
 #chartDiv { width:500px; height:300px; float:left}
@@ -12,6 +12,6 @@ span { font-weight:300 }
 	width:1800px;
 }
 
-.tooltip { padding:5px; font-size:1.2em; font-family:'Arial', sans-serif; font-weight:600 }
+.tooltip { padding:5px; font-size:1.2em; font-family:'Arial', sans-serif; font-weight:bold }
 
 
